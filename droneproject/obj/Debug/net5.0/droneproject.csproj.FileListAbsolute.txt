@@ -59,3 +59,4 @@ C:\Users\Eze\Documents\Visual Studio 2019\source\repos\droneproject\droneproject
 C:\Users\Eze\Documents\Visual Studio 2019\source\repos\droneproject\droneproject\obj\Debug\net5.0\ref\droneproject.dll
 C:\Users\Eze\Documents\Visual Studio 2019\source\repos\droneproject\droneproject\obj\Debug\net5.0\droneproject.pdb
 C:\Users\Eze\Documents\Visual Studio 2019\source\repos\droneproject\droneproject\obj\Debug\net5.0\droneproject.genruntimeconfig.cache
+C:\Users\Eze\Documents\Visual Studio 2019\source\repos\droneproject\droneproject\bin\Debug\net5.0\Comments.xml

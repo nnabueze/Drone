@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>droneproject</name>
+    </assembly>
+    <members>
+        <member name="M:droneproject.Controllers.DroneController.Create">
+            <summary>
+            Create drone
+            </summary>
+        </member>
+    </members>
+</doc>
