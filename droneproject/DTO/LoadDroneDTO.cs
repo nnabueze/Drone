@@ -9,7 +9,7 @@ namespace droneproject.DTO
     {
         public string DroneId { get; set; }
 
-        public List<Item> Mediations { get; set; }
+        public Item Mediations { get; set; }
 
         public class Item
         {
@@ -18,8 +18,6 @@ namespace droneproject.DTO
             public double Weight { get; set; }
 
             public string Code { get; set; }
-
-            public string ImageId { get; set; }
         }
     }
 }

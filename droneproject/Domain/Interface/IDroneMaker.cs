@@ -1,5 +1,6 @@
 ﻿using droneproject.DTO;
 using droneproject.Helpers;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace droneproject.Domain.Interface
     {
         public Task<Response> CreateDrone(RegisterDroneDTO request);
 
-        public Task<Response> LoadDrone(LoadDroneDTO request);
+        public Task<Response> LoadDrone(LoadDroneDTO request, IFormFile mediationImage);
     }
 }

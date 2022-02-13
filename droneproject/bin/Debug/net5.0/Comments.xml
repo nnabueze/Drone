@@ -29,21 +29,21 @@
             API for check drone battery level for a given drone
             </summary>
         </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.LoadDrone(droneproject.DTO.LoadDroneDTO)">
+        <member name="M:droneproject.DataAccess.DroneMaker.LoadDrone(droneproject.DTO.LoadDroneDTO,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Loading drone
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.LoadingMediation(droneproject.DTO.LoadDroneDTO,System.Int32)">
+        <member name="M:droneproject.DataAccess.DroneMaker.LoadingMediation(droneproject.DTO.LoadDroneDTO,System.Int32,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Loading drone with mediations.
             </summary>
             <param name="request">Payload for loading drone</param>
             <param name="droneId">drone index id</param>
         </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.UploadImage(System.String)">
+        <member name="M:droneproject.DataAccess.DroneMaker.UploadImage(System.String,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             uploading mediation image
             </summary>
@@ -55,11 +55,13 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.UpdateDroneState(droneproject.Domain.Drone,droneproject.Domain.StateStatus)">
+        <member name="M:droneproject.DataAccess.DroneMaker.UpdateDroneState(droneproject.DTO.LoadDroneDTO,droneproject.Domain.StateStatus,System.Boolean)">
             <summary>
-            update the state of drone
+            Update drone
             </summary>
-            <param name="request"></param>
+            <param name="request">Medication payload</param>
+            <param name="status">drone status</param>
+            <param name="isComplete">flag to check if drone loading or oaded</param>
         </member>
         <member name="M:droneproject.DataAccess.DroneMaker.GetRandomInt(System.Int32)">
             <summary>

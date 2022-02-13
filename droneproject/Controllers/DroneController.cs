@@ -60,11 +60,11 @@ namespace droneproject.Controllers
         /// </summary>
         [HttpPost]
         [Route("LoadDrone")]
-        public async Task<IActionResult> Load([FromBody] LoadDroneDTO request, [FromForm] IFormFile filemediationImage)
+        public async Task<IActionResult> Load([FromBody] LoadDroneDTO request, [FromHeader] IFormFile mediationImage)
         {
             try
             {
-                var result = await _droneMaker.LoadDrone(request);
+                var result = await _droneMaker.LoadDrone(request, mediationImage);
 
                 var response = new JsonResult(result);
 

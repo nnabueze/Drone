@@ -3,8 +3,11 @@ using droneproject.Domain;
 using droneproject.Domain.Interface;
 using droneproject.DTO;
 using droneproject.Helpers;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using static droneproject.DTO.LoadDroneDTO;
@@ -19,13 +22,17 @@ namespace droneproject.DataAccess
 
         private readonly IMapper _mapper;
 
-        public DroneMaker(IGenericRepository<Drone> droneRepository, IMapper mapper, IGenericRepository<Mediation> mediationRepository)
+        private IWebHostEnvironment _hostEnvironment;
+
+        public DroneMaker(IGenericRepository<Drone> droneRepository, IMapper mapper, IGenericRepository<Mediation> mediationRepository, IWebHostEnvironment hostEnvironment)
         {
             _droneRepository = droneRepository;
 
             _mapper = mapper;
 
             _mediationRepository = mediationRepository;
+
+            _hostEnvironment = hostEnvironment;
         }
 
         public async Task<Response> CreateDrone(RegisterDroneDTO request)
@@ -53,42 +60,60 @@ namespace droneproject.DataAccess
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<Response> LoadDrone(LoadDroneDTO request)
+        public async Task<Response> LoadDrone(LoadDroneDTO request, IFormFile mediationImage)
         {
-            //check if drone id exist
+            //get a drone
             Drone drone = GetSingleDrone(request.DroneId);
 
+
+            // check if the drone exist
             if (drone == null)
 
                 return ResponseGenerator.CreateResponse("Invalid drone referencekey", 404, false);
 
-            //get the total weight of mediiation
 
-            var totalWeight = request.Mediations.Sum(x => x.Weight);
+            //check state of drone
+            if (drone.State != StateStatus.IDLE || drone.State != StateStatus.LOADING)
 
+                return ResponseGenerator.CreateResponse("Drone not in idle or loading state", 422, false);
+
+            
+            // check if the drone battery is low than 25%
             if (drone.Battery <= 25)
 
-                return ResponseGenerator.CreateResponse("Failed to load drone battery below 25%", 423, false);
+                return ResponseGenerator.CreateResponse("Failed to load drone battery is below 25%", 423, false);
 
-            if(drone.Weight < totalWeight)
 
-                return ResponseGenerator.CreateResponse("Mediations heavy than drone", 423, false);
+            // check if single medication is heavyer than drone
+            if(request.Mediations.Weight > drone.Weight)
 
-            if (drone.State != StateStatus.IDLE)
+                return ResponseGenerator.CreateResponse("Medication is heavy", 423, false);
 
-                return ResponseGenerator.CreateResponse("Drone not in idle state", 422, false);
 
-            //updating drone state before loading
-            UpdateDroneState(drone, StateStatus.LOADING);
 
-            //Loading mediation
-            await LoadDrone(request);
+            // total medication weight = loaded medication weight + loading medication weight
+            var totalWeight = drone.LoadingWeight + request.Mediations.Weight;
 
-            //Updating drone after loading
-            UpdateDroneState(drone, StateStatus.LOADED);
 
-            //return response
-            return ResponseGenerator.CreateResponse("Drone loaded", 200, true);
+            if (totalWeight <= drone.Weight)
+            {
+                //updating drone state before loading
+                UpdateDroneState(request, StateStatus.LOADING, false);
+
+                //Loading mediation
+                await LoadDrone(request, mediationImage);
+
+                //return response
+                return ResponseGenerator.CreateResponse("Loading drone successful", 200, true);
+            }
+            else
+            {
+                //Updating drone after loading
+                UpdateDroneState(request, StateStatus.LOADED, true);
+
+                return ResponseGenerator.CreateResponse("Loading completed, failed loading", 423, false);
+            }
+
         }
 
 
@@ -97,20 +122,18 @@ namespace droneproject.DataAccess
         /// </summary>
         /// <param name="request">Payload for loading drone</param>
         /// <param name="droneId">drone index id</param>
-        public async void LoadingMediation(LoadDroneDTO request, int droneId)
+        public async void LoadingMediation(LoadDroneDTO request, int droneId, IFormFile mediationImage)
         {
-            foreach (var item in request.Mediations)
-            {
-                var imageReference = GetRandomInt(10);
+            var imageReference = GetRandomInt(10);
 
-                var mediation = Mediation.Create(item, imageReference, droneId);
+            string imageId = UploadImage(imageReference, mediationImage);
+
+            if (!string.IsNullOrEmpty(imageId))
+            {
+                var mediation = Mediation.Create(request.Mediations, imageId, droneId);
 
                 var saveMediation = await _mediationRepository.Add(mediation);
-
-                if (saveMediation != null)
-
-                    UploadImage(saveMediation.ImageId);
-            }            
+            }
 
             await _mediationRepository.CommitAsync();
         }
@@ -120,9 +143,29 @@ namespace droneproject.DataAccess
         /// uploading mediation image
         /// </summary>
         /// <param name="imageReferenceKey">Unique image reference key</param>
-        public void UploadImage(string imageReferenceKey)
+        public string UploadImage(string imageReferenceKey, IFormFile mediationImage)
         {
+            if (mediationImage.Length > 0)
+            {
+                string path = _hostEnvironment.WebRootPath + "\\Uploads\\";
 
+                string fileName = imageReferenceKey + mediationImage.FileName.Trim();
+
+                if (! Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                using (FileStream fileStream = File.Create(path + fileName))
+                {
+                    mediationImage.CopyTo(fileStream);
+
+                    fileStream.Flush();
+
+                    return fileName;
+                }
+            }
+
+            return "";
         }
 
         /// <summary>
@@ -134,38 +177,47 @@ namespace droneproject.DataAccess
             return _droneRepository.FindFirst(x => x.ReferenceKey == referenceKey);
         }
 
+
         /// <summary>
-        /// update the state of drone
+        /// Update drone
         /// </summary>
-        /// <param name="request"></param>
-        public async void UpdateDroneState(Drone request, StateStatus status)
+        /// <param name="request">Medication payload</param>
+        /// <param name="status">drone status</param>
+        /// <param name="isComplete">flag to check if drone loading or oaded</param>
+        public async void UpdateDroneState(LoadDroneDTO request, StateStatus status, bool isComplete)
         {
+            var drone = GetSingleDrone(request.DroneId);
+
+            if (isComplete)
+
+                drone.LoadingWeight = 0;
+
             switch (status)
             {
                 case StateStatus.IDLE:
-                    request.State = StateStatus.IDLE;
+                    drone.State = StateStatus.IDLE;
                     break;
                 case StateStatus.LOADING:
-                    request.State = StateStatus.LOADING;
+                    drone.State = StateStatus.LOADING;
                     break;
                 case StateStatus.LOADED:
-                    request.State = StateStatus.LOADED;
+                    drone.State = StateStatus.LOADED;
                     break;
                 case StateStatus.DELIVERING:
-                    request.State = StateStatus.DELIVERING;
+                    drone.State = StateStatus.DELIVERING;
                     break;
                 case StateStatus.DELIVERED:
-                    request.State = StateStatus.DELIVERED;
+                    drone.State = StateStatus.DELIVERED;
                     break;
                 case StateStatus.RETURNING:
-                    request.State = StateStatus.RETURNING;
+                    drone.State = StateStatus.RETURNING;
                     break;
                 default:
                     break;
             }
             
 
-            _droneRepository.Update(request);
+            _droneRepository.Update(drone);
 
             await _droneRepository.CommitAsync();
         }

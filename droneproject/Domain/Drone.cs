@@ -18,6 +18,9 @@ namespace droneproject.Domain
         public double Weight { get; set; }
 
 
+        public double LoadingWeight { get; set; }
+
+
         public double Battery { get; set; }
 
         
