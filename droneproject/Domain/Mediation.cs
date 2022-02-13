@@ -9,7 +9,7 @@ namespace droneproject.Domain
     {
         public string Name { get; set; }
 
-        public int Weight { get; set; }
+        public double Weight { get; set; }
 
         public string Code { get; set; }
 

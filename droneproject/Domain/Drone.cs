@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +14,13 @@ namespace droneproject.Domain
 
         public ModelStatus Model { get; set; }
 
-        public int Weight { get; set; }
 
-        public int Battery { get; set; }
+        public double Weight { get; set; }
 
+
+        public double Battery { get; set; }
+
+        
         public StateStatus State { get; set; }
 
         public string ReferenceKey { get; set; }

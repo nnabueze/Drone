@@ -28,29 +28,30 @@ namespace droneproject.Controllers
         /// </summary>
         [HttpPost]
         [Route("RegisterDrone")]
-        public async Task<IActionResult> Create(RegisterDroneDTO request)
+        [ValidateModel]
+        public async Task<IActionResult> Create([FromBody] RegisterDroneDTO request)
         {
-            var result = await _droneMaker.CreateDrone(request);
 
-            var response = new JsonResult(result);
+            try
+            {
+                var result = await _droneMaker.CreateDrone(request);
 
-            response.StatusCode = result.StatusCode;
+                var response = new JsonResult(result);
 
-            return response;
-            //try
-            //{
+                response.StatusCode = result.StatusCode;
 
-            //}
-            //catch (Exception ex)
-            //{
+                return response;
+            }
+            catch (Exception ex)
+            {
 
-            //    var response = new JsonResult(ResponseGenerator.CreateResponse(ex.Message.ToString(), 500, false));
+                var response = new JsonResult(ResponseGenerator.CreateResponse(ex.Message.ToString(), 500, false));
 
-            //    response.StatusCode = 500;
+                response.StatusCode = 500;
 
-            //    return response;
+                return response;
 
-            //}
+            }
         }
 
 

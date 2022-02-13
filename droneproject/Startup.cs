@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.IO;
 using droneproject.Domain.Interface;
 using AutoMapper;
+using droneproject.Helpers;
 
 namespace droneproject
 {
@@ -49,7 +50,16 @@ namespace droneproject
                 .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
                 .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+            
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(ValidateModelAttribute));
+            });
+
+            services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Drone", Version = "v1" });
@@ -69,6 +79,7 @@ namespace droneproject
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Drone v1"));
             }
+
 
             app.UseHttpsRedirection();
 
