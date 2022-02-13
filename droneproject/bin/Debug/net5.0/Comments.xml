@@ -9,7 +9,7 @@
             API for registering a drone
             </summary>
         </member>
-        <member name="M:droneproject.Controllers.DroneController.Load">
+        <member name="M:droneproject.Controllers.DroneController.Load(droneproject.DTO.LoadDroneDTO,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             API for loading a drone with medication items
             </summary>
@@ -28,6 +28,45 @@
             <summary>
             API for check drone battery level for a given drone
             </summary>
+        </member>
+        <member name="M:droneproject.DataAccess.DroneMaker.LoadDrone(droneproject.DTO.LoadDroneDTO)">
+            <summary>
+            Loading drone
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:droneproject.DataAccess.DroneMaker.LoadingMediation(droneproject.DTO.LoadDroneDTO,System.Int32)">
+            <summary>
+            Loading drone with mediations.
+            </summary>
+            <param name="request">Payload for loading drone</param>
+            <param name="droneId">drone index id</param>
+        </member>
+        <member name="M:droneproject.DataAccess.DroneMaker.UploadImage(System.String)">
+            <summary>
+            uploading mediation image
+            </summary>
+            <param name="imageReferenceKey">Unique image reference key</param>
+        </member>
+        <member name="M:droneproject.DataAccess.DroneMaker.GetSingleDrone(System.String)">
+            <summary>
+            Retrieving a single drone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:droneproject.DataAccess.DroneMaker.UpdateDroneState(droneproject.Domain.Drone,droneproject.Domain.StateStatus)">
+            <summary>
+            update the state of drone
+            </summary>
+            <param name="request"></param>
+        </member>
+        <member name="M:droneproject.DataAccess.DroneMaker.GetRandomInt(System.Int32)">
+            <summary>
+            Generate randow numbers
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

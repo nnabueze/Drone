@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static droneproject.DTO.LoadDroneDTO;
 
 namespace droneproject.AutoMapper
 {
@@ -12,7 +13,9 @@ namespace droneproject.AutoMapper
     {
         public DroneProfile()
         {
-            CreateMap<RegisterDroneDTO, Drone>().ReverseMap();
+            CreateMap<RegisterDroneDTO, Drone>();
+
+            CreateMap<Item, Mediation>();
         }
     }
 }
