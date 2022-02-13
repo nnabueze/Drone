@@ -18,6 +18,8 @@ namespace droneproject.Domain
         public int Battery { get; set; }
 
         public StateStatus State { get; set; }
+
+        public string ReferenceKey { get; set; }
     }
 
     public enum ModelStatus

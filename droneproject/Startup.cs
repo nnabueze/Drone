@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+using droneproject.Domain.Interface;
+using AutoMapper;
 
 namespace droneproject
 {
@@ -38,15 +40,20 @@ namespace droneproject
 
             //services.AddDbContext<ApplicationDbContext>(options => 
                 //options.UseSqlServer($"Server={server},{port};Initial Catalog={database};User Id={user};Password={password}"));
+
             services.AddDbContext<ApplicationDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+            services
+                .AddScoped<IDroneMaker, DroneMaker>()
+                .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
+                .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Drone", Version = "v1" });
 
-                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlFile = "Comments" + ".xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);

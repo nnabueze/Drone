@@ -4,9 +4,29 @@
         <name>droneproject</name>
     </assembly>
     <members>
-        <member name="M:droneproject.Controllers.DroneController.Create">
+        <member name="M:droneproject.Controllers.DroneController.Create(droneproject.DTO.RegisterDroneDTO)">
             <summary>
-            Create drone
+            API for registering a drone
+            </summary>
+        </member>
+        <member name="M:droneproject.Controllers.DroneController.Load">
+            <summary>
+            API for loading a drone with medication items
+            </summary>
+        </member>
+        <member name="M:droneproject.Controllers.DroneController.MedicationItem">
+            <summary>
+            API for checking loaded medication items for a given drone
+            </summary>
+        </member>
+        <member name="M:droneproject.Controllers.DroneController.AvailableDones">
+            <summary>
+            API for checking available drones for loading
+            </summary>
+        </member>
+        <member name="M:droneproject.Controllers.DroneController.BatteryLevel">
+            <summary>
+            API for check drone battery level for a given drone
             </summary>
         </member>
     </members>
