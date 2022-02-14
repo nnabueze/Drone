@@ -126,7 +126,7 @@ namespace droneproject.DataAccess
 
                 return ResponseGenerator.CreateResponse("Drone not found", 404,false);
 
-            return ResponseGenerator.CreateResponse("Sucessful", 200, true, new { droneId = drone.ReferenceKey, batteryLevel = string.Format("{0}%", drone.Battery)});
+            return ResponseGenerator.CreateResponse("Sucessful", 200, true, new { droneId = drone.ReferenceKey, batteryLevel = drone.Battery });
         }
 
 

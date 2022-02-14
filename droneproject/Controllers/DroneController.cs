@@ -39,7 +39,7 @@ namespace droneproject.Controllers
 
 
         /// <summary>
-        /// API for registering a drone
+        /// API for registering a drone, it asume that state of drone is IDLE at registration and battery is 100.
         /// </summary>
         [HttpPost]
         [Route("RegisterDrone")]
@@ -72,10 +72,10 @@ namespace droneproject.Controllers
 
 
         /// <summary>
-        /// Upload medication image
+        /// Upload medication image and reterive id for the image for loading medication
         /// </summary>
-        /// <param name="mediationImage"></param>
-        /// <returns></returns>
+        /// <param name="mediationImage">image</param>
+        /// <returns>returns the unique image id to save in the database</returns>
         [HttpPost]
         [Route("ImageUpload")]
         public IActionResult Upload(IFormFile mediationImage)
