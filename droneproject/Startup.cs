@@ -33,17 +33,17 @@ namespace droneproject
         public void ConfigureServices(IServiceCollection services)
         {
             //connection for containerize application (fix later)
-            var server = Configuration["DBServer"] ?? "Localhost";
-            var port = Configuration["DBPort"] ?? "1433";
-            var user = Configuration["DBUser"] ?? "SA";
+            var server = Configuration["DBServer"] ?? "";
+            var port = Configuration["DBPort"] ?? "";
+            var user = Configuration["DBUser"] ?? "";
             var password = Configuration["DBPassword"] ?? "";
-            var database = Configuration["Database"] ?? "DroneDb";
+            var database = Configuration["Database"] ?? "";
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer($"Server={server},{port};Initial Catalog={database};User Id={user};Password={password}"));
 
             //services.AddDbContext<ApplicationDbContext>(options => 
-                //options.UseSqlServer($"Server={server},{port};Initial Catalog={database};User Id={user};Password={password}"));
-
-            services.AddDbContext<ApplicationDbContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
             services
                 .AddScoped<IDroneMaker, DroneMaker>()
@@ -96,6 +96,8 @@ namespace droneproject
             {
                 endpoints.MapControllers();
             });
+
+            PrepMigration.PrepPopulation(app);
         }
     }
 }

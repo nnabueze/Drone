@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: db
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Pelemo@1"
+      MSSQL_PID: Express
+    volumes:
+      - sqlvolume:/var/opt/mssql
+    networks:
+      - isolated_network
+
+  drone-pt:
+    build:
+      context: .
+      dockerfile: ./droneproject/Dockerfile
+    image: drone:v1
+    container_name: Drone
+    restart: always
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DBServer=db
+      - DBPort=1433
+      - DBUser=SA
+      - DBPassword=Pelemo@1
+      - Database=DroneDb
+    ports:
+      # - "49158:80"
+      # - "49157:443"
+      - "80:80"
+      - "81:443"
+    depends_on:
+      - db
+    networks:
+      - isolated_network
+
+volumes:
+  sqlvolume:
+networks:
+  isolated_network:
