@@ -51,7 +51,7 @@
             <param name="mediationImage"></param>
             <returns></returns>
         </member>
-        <member name="M:droneproject.DataAccess.MedicationLoad.LoadingMediation(droneproject.DTO.LoadDroneDTO,System.Int32)">
+        <member name="M:droneproject.DataAccess.MedicationLoad.LoadingMediation(droneproject.DTO.LoadDroneDTO,droneproject.Domain.Drone)">
             <summary>
             Loadig medication
             </summary>
@@ -60,7 +60,7 @@
             <param name="mediationImage"></param>
             <returns></returns>
         </member>
-        <member name="M:droneproject.DataAccess.MedicationLoad.UpdateDroneState(droneproject.DTO.LoadDroneDTO,droneproject.Domain.StateStatus,System.Boolean)">
+        <member name="M:droneproject.DataAccess.MedicationLoad.UpdateDroneState(droneproject.Domain.Drone,droneproject.Domain.StateStatus,System.Boolean)">
             <summary>
             Update drone
             </summary>

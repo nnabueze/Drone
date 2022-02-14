@@ -20,13 +20,5 @@ namespace droneproject.DTO
         [Required(ErrorMessage = "Weight is required!")]
         [Range(0, 500, ErrorMessage = "Weight is between 1 and 500")]
         public double Weight { get; set; }
-
-        [Required(ErrorMessage = "Battery level is required!")]
-        [Range(0, 100, ErrorMessage = "Battery level is between 0 and 100 percent")]
-        public double Battery { get; set; }
-
-        [Required(ErrorMessage = "State is required!")]
-        [EnumDataType(typeof(StateStatus), ErrorMessage = "State must be IDLE | LOADING | LOADED | DELIVERING | DELIVERED | RETURNING")]
-        public string State { get; set; }
     }
 }

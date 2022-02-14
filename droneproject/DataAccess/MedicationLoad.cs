@@ -56,7 +56,7 @@ namespace droneproject.DataAccess
 
 
             //check state of drone
-            if (drone.State != StateStatus.IDLE || drone.State != StateStatus.LOADING)
+            if (drone.State != StateStatus.IDLE && drone.State != StateStatus.LOADING)
 
                 return ResponseGenerator.CreateResponse("Drone not in idle or loading state", 422, false);
 
@@ -68,23 +68,27 @@ namespace droneproject.DataAccess
 
 
             // check if single medication is heavyer than drone
-            if (request.Mediations.Weight > drone.Weight)
+            if (request.Mediations.Weight >= drone.Weight)
 
                 return ResponseGenerator.CreateResponse("Medication is heavy", 423, false);
 
 
 
-            // total medication weight = loaded medication weight + loading medication weight
+            // total medication weight = previous loading medication weight + current loading medication weight
             var totalWeight = drone.LoadingWeight + request.Mediations.Weight;
+
+
+            //remaining drone weight to full capacity
+            var remainingWeight = drone.Weight - drone.LoadingWeight; 
 
 
             if (totalWeight <= drone.Weight)
             {
                 //updating drone state before loading
-                UpdateDroneState(request, StateStatus.LOADING, false);
+                await UpdateDroneState(drone, StateStatus.LOADING, false);
 
                 //Loading mediation
-                var isLoaded = await LoadingMediation(request, drone.Id);
+                var isLoaded = await LoadingMediation(request, drone);
 
                 if(isLoaded)
 
@@ -92,11 +96,15 @@ namespace droneproject.DataAccess
 
 
                 return ResponseGenerator.CreateResponse("failed loading drone", 423, false);
+
+            }else if(remainingWeight > 0)
+            {
+                return ResponseGenerator.CreateResponse(string.Format("Failed {0}gr is remaining to reach drone weight capacity", remainingWeight), 423, false);
             }
             else
             {
                 //Updating drone after loading
-                UpdateDroneState(request, StateStatus.LOADED, true);
+                await UpdateDroneState(drone, StateStatus.LOADED, true);
 
                 return ResponseGenerator.CreateResponse("Loading completed, failed loading", 423, false);
             }
@@ -111,10 +119,18 @@ namespace droneproject.DataAccess
         /// <param name="droneId"></param>
         /// <param name="mediationImage"></param>
         /// <returns></returns>
-        public async Task<bool> LoadingMediation(LoadDroneDTO request, int droneId)
+        public async Task<bool> LoadingMediation(LoadDroneDTO request, Drone drone)
         {
+            //sum total loading weight and update db
+            var totalLoad = drone.LoadingWeight + request.Mediations.Weight;
 
-            var mediation = Mediation.Create(request.Mediations, droneId);
+            drone.LoadingWeight = totalLoad;
+
+            _droneRepository.Update(drone);
+
+            await _droneRepository.CommitAsync();
+
+            var mediation = Mediation.Create(request.Mediations, drone.Id);
 
             var saveMediation = await _mediationRepository.Add(mediation);
 
@@ -134,9 +150,8 @@ namespace droneproject.DataAccess
         /// <param name="request">Medication payload</param>
         /// <param name="status">drone status</param>
         /// <param name="isComplete">flag to check if drone loading or oaded</param>
-        public async void UpdateDroneState(LoadDroneDTO request, StateStatus status, bool isComplete)
+        public async Task UpdateDroneState(Drone drone, StateStatus status, bool isComplete)
         {
-            var drone = GetSingleDrone(request.DroneId);
 
             if (isComplete)
 

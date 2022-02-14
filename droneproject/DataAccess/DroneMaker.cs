@@ -45,6 +45,12 @@ namespace droneproject.DataAccess
 
             mappedrone.ReferenceKey = referenceKey;
 
+            //inital state of drone is IDLE
+            mappedrone.State = StateStatus.IDLE;
+
+            //inital battery level at registering time is 100%
+            mappedrone.Battery = 100;
+
             //save or create drone
             var savedDrone = await _droneRepository.Add(mappedrone);
 
