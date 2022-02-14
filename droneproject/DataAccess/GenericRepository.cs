@@ -25,6 +25,11 @@ namespace droneproject.DataAccess
             return entity;
         }
 
+        public virtual IEnumerable<T> FindAll()
+        {
+            return _context.Set<T>().AsEnumerable();
+        }
+
         public virtual async Task<List<T>> Add(List<T> entity)
         {
             foreach (var item in entity)

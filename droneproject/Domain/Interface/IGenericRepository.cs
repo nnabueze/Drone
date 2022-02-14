@@ -20,6 +20,8 @@ namespace droneproject.Domain.Interface
 
         Task<List<T>> Add(List<T> entity);
 
+        public IEnumerable<T> FindAll();
+
         public T FirstOrDefault();
 
         void Update(T entity);

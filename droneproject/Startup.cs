@@ -49,6 +49,7 @@ namespace droneproject
                 .AddScoped<IDroneMaker, DroneMaker>()
                 .AddScoped<IMedicationLoad, MedicationLoad>()
                 .AddScoped<IMedicationLoadedItem, MedicationLoadedItem>()
+                .AddScoped<IAvilableDrone, AvilableDrone>()
                 .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
                 .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 

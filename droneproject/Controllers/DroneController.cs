@@ -22,14 +22,21 @@ namespace droneproject.Controllers
 
         private readonly IMedicationLoadedItem _medicationLoadedItem;
 
-        public DroneController(IDroneMaker droneMaker, IMedicationLoad medicationLoad, IMedicationLoadedItem medicationLoadedItem)
+        private readonly IAvilableDrone _avilableDrone;
+
+        public DroneController(IDroneMaker droneMaker, IMedicationLoad medicationLoad, IMedicationLoadedItem medicationLoadedItem, 
+            
+            IAvilableDrone avilableDrone)
         {
             _droneMaker = droneMaker;
 
             _medicationLoad = medicationLoad;
 
             _medicationLoadedItem = medicationLoadedItem;
+
+            _avilableDrone = avilableDrone;
         }
+
 
         /// <summary>
         /// API for registering a drone
@@ -165,7 +172,26 @@ namespace droneproject.Controllers
         [Route("AvailableDones")]
         public IActionResult AvailableDones()
         {
-            return Ok();
+            try
+            {
+                var result = _avilableDrone.RetrieveDrone();
+
+                var response = new JsonResult(result);
+
+                response.StatusCode = result.StatusCode;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                var response = new JsonResult(ResponseGenerator.CreateResponse(ex.Message.ToString(), 500, false));
+
+                response.StatusCode = 500;
+
+                return response;
+
+            }
         }
 
 

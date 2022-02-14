@@ -36,6 +36,12 @@
             API for check drone battery level for a given drone
             </summary>
         </member>
+        <member name="M:droneproject.DataAccess.AvilableDrone.RetrieveDrone">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:droneproject.DataAccess.DroneMaker.GetRandomInt(System.Int32)">
             <summary>
             Generate randow numbers
