@@ -20,11 +20,15 @@ namespace droneproject.Controllers
 
         private readonly IMedicationLoad _medicationLoad;
 
-        public DroneController(IDroneMaker droneMaker, IMedicationLoad medicationLoad)
+        private readonly IMedicationLoadedItem _medicationLoadedItem;
+
+        public DroneController(IDroneMaker droneMaker, IMedicationLoad medicationLoad, IMedicationLoadedItem medicationLoadedItem)
         {
             _droneMaker = droneMaker;
 
             _medicationLoad = medicationLoad;
+
+            _medicationLoadedItem = medicationLoadedItem;
         }
 
         /// <summary>
@@ -97,6 +101,7 @@ namespace droneproject.Controllers
         /// </summary>
         [HttpPost]
         [Route("LoadDrone")]
+        [ValidateModel]
         public async Task<IActionResult> Load([FromBody] LoadDroneDTO request )
         {
             try
@@ -128,9 +133,28 @@ namespace droneproject.Controllers
         /// </summary>
         [HttpGet]
         [Route("LoadedDroneItem")]
-        public IActionResult MedicationItem()
+        public async Task<IActionResult> MedicationItem([FromQuery]string droneId)
         {
-            return Ok();
+            try
+            {
+                var result = await _medicationLoadedItem.LoadedMedicationItem(droneId);
+
+                var response = new JsonResult(result);
+
+                response.StatusCode = result.StatusCode;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                var response = new JsonResult(ResponseGenerator.CreateResponse(ex.Message.ToString(), 500, false));
+
+                response.StatusCode = 500;
+
+                return response;
+
+            }
         }
 
 

@@ -16,6 +16,9 @@ namespace droneproject.AutoMapper
             CreateMap<RegisterDroneDTO, Drone>();
 
             CreateMap<Item, Mediation>();
+
+            CreateMap<Mediation, Item>();
+
         }
     }
 }

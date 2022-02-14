@@ -21,7 +21,7 @@
             API for loading a drone with medication items
             </summary>
         </member>
-        <member name="M:droneproject.Controllers.DroneController.MedicationItem">
+        <member name="M:droneproject.Controllers.DroneController.MedicationItem(System.String)">
             <summary>
             API for checking loaded medication items for a given drone
             </summary>
@@ -93,6 +93,19 @@
             uploading mediation image
             </summary>
             <param name="imageReferenceKey">Unique image reference key</param>
+        </member>
+        <member name="M:droneproject.DataAccess.MedicationLoadedItem.LoadedMedicationItem(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="droneId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:droneproject.DataAccess.MedicationLoadedItem.GetSingleDrone(System.String)">
+            <summary>
+            Retrieving a single drone
+            </summary>
+            <returns></returns>
         </member>
     </members>
 </doc>
