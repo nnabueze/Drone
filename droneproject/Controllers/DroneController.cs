@@ -200,9 +200,28 @@ namespace droneproject.Controllers
         /// </summary>
         [HttpGet]
         [Route("CheckBatteryLevel")]
-        public IActionResult BatteryLevel()
+        public IActionResult BatteryLevel([FromQuery] string droneId)
         {
-            return Ok();
+            try
+            {
+                var result = _avilableDrone.CheckBatteryLevel(droneId);
+
+                var response = new JsonResult(result);
+
+                response.StatusCode = result.StatusCode;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                var response = new JsonResult(ResponseGenerator.CreateResponse(ex.Message.ToString(), 500, false));
+
+                response.StatusCode = 500;
+
+                return response;
+
+            }
         }
     }
 }

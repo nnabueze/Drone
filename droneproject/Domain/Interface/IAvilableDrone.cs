@@ -9,5 +9,7 @@ namespace droneproject.Domain.Interface
     public interface IAvilableDrone
     {
         public Response RetrieveDrone();
+
+        public Response CheckBatteryLevel(string dronId);
     }
 }

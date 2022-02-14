@@ -45,6 +45,7 @@ namespace droneproject.DataAccess
 
                 var modelState = GetDroneModelState(x.Model);
 
+                //returning only idle and loading drone that is availabl for loading
                 if (droneState.Equals("IDLE") || droneState.Equals("LOADING"))
                 {
                     var drone = new RetrieveDroneDTO()
@@ -115,6 +116,27 @@ namespace droneproject.DataAccess
                 default:
                     return "Heavyweight";
             }
+        }
+
+        public Response CheckBatteryLevel(string dronId)
+        {
+            var drone = GetSingleDrone(dronId);
+
+            if(drone == null)
+
+                return ResponseGenerator.CreateResponse("Drone not found", 404,false);
+
+            return ResponseGenerator.CreateResponse("Sucessful", 200, true, new { droneId = drone.ReferenceKey, batteryLevel = string.Format("{0}%", drone.Battery)});
+        }
+
+
+        /// <summary>
+        /// Retrieving a single drone
+        /// </summary>
+        /// <returns></returns>
+        public Drone GetSingleDrone(string referenceKey)
+        {
+            return _droneRepository.FindFirst(x => x.ReferenceKey == referenceKey);
         }
     }
 }

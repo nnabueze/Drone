@@ -31,7 +31,7 @@
             API for checking available drones for loading
             </summary>
         </member>
-        <member name="M:droneproject.Controllers.DroneController.BatteryLevel">
+        <member name="M:droneproject.Controllers.DroneController.BatteryLevel(System.String)">
             <summary>
             API for check drone battery level for a given drone
             </summary>
@@ -39,6 +39,12 @@
         <member name="M:droneproject.DataAccess.AvilableDrone.RetrieveDrone">
             <summary>
             
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:droneproject.DataAccess.AvilableDrone.GetSingleDrone(System.String)">
+            <summary>
+            Retrieving a single drone
             </summary>
             <returns></returns>
         </member>
