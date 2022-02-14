@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace droneproject.Domain.Interface
 {
-    public interface IDroneMaker
+    public interface IMedicationLoad
     {
-        public Task<Response> CreateDrone(RegisterDroneDTO request);
+        public Task<Response> Load(LoadDroneDTO request);
+
+        public Response UploadImage(IFormFile mediationImage);
     }
 }

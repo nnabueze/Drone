@@ -9,7 +9,14 @@
             API for registering a drone
             </summary>
         </member>
-        <member name="M:droneproject.Controllers.DroneController.Load(droneproject.DTO.LoadDroneDTO,Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:droneproject.Controllers.DroneController.Upload(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Upload medication image
+            </summary>
+            <param name="mediationImage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:droneproject.Controllers.DroneController.Load(droneproject.DTO.LoadDroneDTO)">
             <summary>
             API for loading a drone with medication items
             </summary>
@@ -29,33 +36,31 @@
             API for check drone battery level for a given drone
             </summary>
         </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.LoadDrone(droneproject.DTO.LoadDroneDTO,Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:droneproject.DataAccess.DroneMaker.GetRandomInt(System.Int32)">
             <summary>
-            Loading drone
+            Generate randow numbers
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:droneproject.DataAccess.MedicationLoad.Load(droneproject.DTO.LoadDroneDTO)">
+            <summary>
+            Loading medication
             </summary>
             <param name="request"></param>
+            <param name="mediationImage"></param>
             <returns></returns>
         </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.LoadingMediation(droneproject.DTO.LoadDroneDTO,System.Int32,Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:droneproject.DataAccess.MedicationLoad.LoadingMediation(droneproject.DTO.LoadDroneDTO,System.Int32)">
             <summary>
-            Loading drone with mediations.
+            Loadig medication
             </summary>
-            <param name="request">Payload for loading drone</param>
-            <param name="droneId">drone index id</param>
-        </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.UploadImage(System.String,Microsoft.AspNetCore.Http.IFormFile)">
-            <summary>
-            uploading mediation image
-            </summary>
-            <param name="imageReferenceKey">Unique image reference key</param>
-        </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.GetSingleDrone(System.String)">
-            <summary>
-            Retrieving a single drone
-            </summary>
+            <param name="request"></param>
+            <param name="droneId"></param>
+            <param name="mediationImage"></param>
             <returns></returns>
         </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.UpdateDroneState(droneproject.DTO.LoadDroneDTO,droneproject.Domain.StateStatus,System.Boolean)">
+        <member name="M:droneproject.DataAccess.MedicationLoad.UpdateDroneState(droneproject.DTO.LoadDroneDTO,droneproject.Domain.StateStatus,System.Boolean)">
             <summary>
             Update drone
             </summary>
@@ -63,12 +68,31 @@
             <param name="status">drone status</param>
             <param name="isComplete">flag to check if drone loading or oaded</param>
         </member>
-        <member name="M:droneproject.DataAccess.DroneMaker.GetRandomInt(System.Int32)">
+        <member name="M:droneproject.DataAccess.MedicationLoad.GetSingleDrone(System.String)">
+            <summary>
+            Retrieving a single drone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:droneproject.DataAccess.MedicationLoad.GetRandomInt(System.Int32)">
             <summary>
             Generate randow numbers
             </summary>
             <param name="length"></param>
             <returns></returns>
+        </member>
+        <member name="M:droneproject.DataAccess.MedicationLoad.UploadImage(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            uploading medication image
+            </summary>
+            <param name="mediationImage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:droneproject.DataAccess.MedicationLoad.Upload(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            uploading mediation image
+            </summary>
+            <param name="imageReferenceKey">Unique image reference key</param>
         </member>
     </members>
 </doc>

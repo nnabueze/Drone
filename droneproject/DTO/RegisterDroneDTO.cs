@@ -18,7 +18,7 @@ namespace droneproject.DTO
         public string Model { get; set; }
 
         [Required(ErrorMessage = "Weight is required!")]
-        [Range(1, 500, ErrorMessage = "Weight is between 1 and 500")]
+        [Range(0, 500, ErrorMessage = "Weight is between 1 and 500")]
         public double Weight { get; set; }
 
         [Required(ErrorMessage = "Battery level is required!")]

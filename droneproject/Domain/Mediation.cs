@@ -25,7 +25,7 @@ namespace droneproject.Domain
 
         }
 
-        public Mediation(Item request, string imageReferenceKey, int droneId)
+        public Mediation(Item request, int droneId)
         {
             Name = request.Name;
 
@@ -33,15 +33,15 @@ namespace droneproject.Domain
 
             Code = request.Code;
 
-            ImageId = imageReferenceKey;
+            ImageId = request.ImageReference;
 
             DroneId = droneId;
 
         }
 
-        public static Mediation Create(Item request, string imageReferenceKey, int droneId)
+        public static Mediation Create(Item request, int droneId)
         {
-            return new Mediation(request, imageReferenceKey, droneId);
+            return new Mediation(request, droneId);
         } 
     }
 }

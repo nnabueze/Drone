@@ -18,9 +18,13 @@ namespace droneproject.Controllers
 
         private readonly IDroneMaker _droneMaker;
 
-        public DroneController(IDroneMaker droneMaker)
+        private readonly IMedicationLoad _medicationLoad;
+
+        public DroneController(IDroneMaker droneMaker, IMedicationLoad medicationLoad)
         {
             _droneMaker = droneMaker;
+
+            _medicationLoad = medicationLoad;
         }
 
         /// <summary>
@@ -55,16 +59,19 @@ namespace droneproject.Controllers
         }
 
 
+
         /// <summary>
-        /// API for loading a drone with medication items
+        /// Upload medication image
         /// </summary>
+        /// <param name="mediationImage"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("LoadDrone")]
-        public async Task<IActionResult> Load([FromBody] LoadDroneDTO request, [FromHeader] IFormFile mediationImage)
+        [Route("ImageUpload")]
+        public IActionResult Upload(IFormFile mediationImage)
         {
             try
             {
-                var result = await _droneMaker.LoadDrone(request, mediationImage);
+                var result = _medicationLoad.UploadImage(mediationImage);
 
                 var response = new JsonResult(result);
 
@@ -83,6 +90,37 @@ namespace droneproject.Controllers
 
             }
         }
+
+
+        /// <summary>
+        /// API for loading a drone with medication items
+        /// </summary>
+        [HttpPost]
+        [Route("LoadDrone")]
+        public async Task<IActionResult> Load([FromBody] LoadDroneDTO request )
+        {
+            try
+            {
+                var result = await _medicationLoad.Load(request);
+
+                var response = new JsonResult(result);
+
+                response.StatusCode = result.StatusCode;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                var response = new JsonResult(ResponseGenerator.CreateResponse(ex.Message.ToString(), 500, false));
+
+                response.StatusCode = 500;
+
+                return response;
+
+            }
+        }       
+
 
 
         /// <summary>

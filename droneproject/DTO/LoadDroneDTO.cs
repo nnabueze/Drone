@@ -18,6 +18,8 @@ namespace droneproject.DTO
             public double Weight { get; set; }
 
             public string Code { get; set; }
+
+            public string ImageReference { get; set; }
         }
     }
 }

@@ -47,6 +47,7 @@ namespace droneproject
 
             services
                 .AddScoped<IDroneMaker, DroneMaker>()
+                .AddScoped<IMedicationLoad, MedicationLoad>()
                 .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
                 .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
@@ -64,7 +65,7 @@ namespace droneproject
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Drone", Version = "v1" });
 
-                c.OperationFilter<SwaggerFileOperationFilter>();
+                //c.OperationFilter<SwaggerFileOperationFilter>();
 
                 var xmlFile = "Comments" + ".xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
